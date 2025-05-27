@@ -105,18 +105,24 @@
             align-items: center;
         }
 
+        /* MODIFIED: Made logo a link */
+        .logo-link {
+            text-decoration: none;
+            color: inherit; /* Inherits color from .logo if wrapped, or set explicitly */
+            display: inline-block; /* Or block, depending on desired layout with .logo */
+        }
         .logo {
             font-size: 1.8rem;
             font-weight: 400;
             letter-spacing: 2px;
-            color: var(--text-primary);
+            color: var(--text-primary); /* Ensure color is set on the div if a is parent */
             cursor: pointer;
             transition: all 0.5s ease;
             text-transform: uppercase;
             position: relative;
         }
 
-        .logo:hover {
+        .logo-link:hover .logo { /* Apply hover to .logo when .logo-link is hovered */
             letter-spacing: 4px;
             text-shadow:
                 0 0 10px rgba(255, 255, 255, 0.5),
@@ -124,6 +130,7 @@
                 0 0 30px rgba(255, 255, 255, 0.1);
             animation: flicker 0.5s ease-in-out infinite alternate;
         }
+
 
         @keyframes flicker {
             0% { opacity: 1; }
@@ -146,22 +153,20 @@
             text-transform: uppercase;
             font-size: 0.9rem;
         }
-         /* Style for nav links that are actual <a> tags inside .nav-item */
+        /* Style for nav links that are actual <a> tags inside .nav-item */
         .nav-item a {
-            color: var(--text-primary);
+            color: var(--text-primary); /* Default color for links */
             text-decoration: none;
-            display: block; /* If the <a> tag is the nav-item itself */
+            display: block; /* Ensures the link fills the .nav-item if needed */
         }
-        .nav-item a:hover {
-             color: var(--accent);
-             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-        }
-
-
         .nav-item:hover > a, .nav-item:hover { /* Ensure hover applies to div or link inside */
             color: var(--accent);
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
             animation: glitch 0.3s ease-in-out;
+        }
+         /* Ensure direct <a> child also gets hover animation if .nav-item is the one animated */
+        .nav-item:hover a {
+            color: var(--accent); /* Keep text color consistent on hover */
         }
 
 
@@ -187,7 +192,7 @@
             visibility: hidden;
             transform: translateX(-50%) translateY(-10px);
             transition: all 0.3s ease;
-            min-width: 200px;
+            min-width: 200px; /* Adjust as needed for content */
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
         }
 
@@ -197,22 +202,22 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        .dropdown-item {
+        .dropdown-item { /* This class will now be on <a> tags */
             padding: 0.8rem 1.5rem;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             font-size: 0.85rem;
             letter-spacing: 0.5px;
-            display: block; /* Make div behave like a block for padding */
-            color: var(--text-primary); /* Default color */
-            text-decoration: none; /* Remove underline if it's an <a> tag */
+            display: block;
+            color: var(--text-primary);
+            text-decoration: none;
         }
         .dropdown-item:hover {
             background: rgba(255, 255, 255, 0.05);
             padding-left: 2.5rem;
             text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
-            color: var(--accent); /* Ensure hover text color change */
+            color: var(--accent);
         }
         .dropdown-item::before {
             content: '>';
@@ -228,7 +233,7 @@
 
         /* Hero Banner */
         .hero {
-            margin-top: 80px; /* Assuming nav height is around 80px */
+            margin-top: 80px;
             position: relative;
             width: 100%;
             max-width: 1696px;
@@ -237,7 +242,7 @@
             height: 645px;
             overflow: hidden;
             background: #000;
-            z-index: 3; /* Above vignette */
+            z-index: 3;
         }
 
         .hero-image-placeholder {
@@ -251,6 +256,7 @@
             overflow: hidden;
         }
 
+        /* ... (rest of your existing CSS for .basilisk-elf-container, .basilisk-side, .elf-side, .basilisk-eye, etc. remains the same) ... */
         /* The philosophical duality */
         .basilisk-elf-container {
             position: absolute;
@@ -599,11 +605,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); /* Darker overlay */
+            background-color: rgba(0, 0, 0, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2000; /* Above everything */
+            z-index: 2000;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -623,7 +629,7 @@
             color: var(--text-primary);
             font-size: 1.2rem;
             max-width: 90%;
-            width: 500px; /* Adjust as needed */
+            width: 500px;
         }
         .modal-close-btn {
             position: absolute;
@@ -638,23 +644,23 @@
             color: var(--accent);
         }
         .modal-text {
-            word-break: break-all; /* For long strings like addresses */
-            margin-bottom: 1rem; /* Spacing for Bitcoin address modal */
+            word-break: break-all;
+            margin-bottom: 1rem;
         }
         .bitcoin-address-text {
             cursor: pointer;
             color: var(--accent);
             border-bottom: 1px dashed var(--accent-dim);
             transition: color 0.2s ease, border-bottom-color 0.2s ease;
-            display: inline-block; /* For better hover area */
+            display: inline-block;
             padding: 0.2rem 0;
         }
         .bitcoin-address-text:hover {
-            color: #00ccff; /* Match glowing blue links */
+            color: #00ccff;
             border-bottom-color: #00ccff;
         }
         .copy-confirmation {
-            display: block; /* On new line */
+            display: block;
             margin-top: 0.8rem;
             font-size: 0.9rem;
             color: var(--accent);
@@ -700,16 +706,18 @@
 <body>
     <nav>
         <div class="nav-container">
-            <div class="logo">Forrest and AI</div>
+            <a href="index.html" class="logo-link">
+                <div class="logo">Forrest and AI</div>
+            </a>
             <div class="nav-links">
-                <div class="nav-item" id="homeNavButton">HOME</div>
+                <div class="nav-item"><a href="index.html" style="color: inherit; text-decoration: none;">HOME</a></div>
                 <div class="nav-item">
                     VIDEO
                     <div class="dropdown">
-                        <div class="dropdown-item">Episodes</div>
-                        <div class="dropdown-item">Early Slop</div>
-                        <div class="dropdown-item">Traditional Work</div>
-                        <div class="dropdown-item">Supplements</div>
+                        <a href="episodes.html" class="dropdown-item">Episodes</a>
+                        <a href="early_slop.html" class="dropdown-item">Early Slop</a>
+                        <a href="traditional_work.html" class="dropdown-item">Traditional Work</a>
+                        <a href="supplements.html" class="dropdown-item">Supplements</a>
                     </div>
                 </div>
                 <div class="nav-item">
@@ -719,7 +727,7 @@
                         <div class="dropdown-item" id="bitcoinNavButton">Bitcoin Address</div>
                     </div>
                 </div>
-                <div class="nav-item"><a href="about.html" style="color:inherit; text-decoration:none;">ABOUT</a></div>
+                <div class="nav-item"><a href="about.html" style="color: inherit; text-decoration: none;">ABOUT</a></div>
                 <div class="nav-item" id="contactNavButton">CONTACT</div>
                 </div>
         </div>
@@ -761,14 +769,14 @@
 
     <div id="contactModal" class="modal-overlay">
         <div class="modal-content">
-            <span class="modal-close-btn" id="contactModalClose">&times;</span>
+            <span class="modal-close-btn" id="contactModalClose">×</span>
             <p class="modal-text">jozephk@protonmail.com</p>
         </div>
     </div>
 
     <div id="bitcoinModal" class="modal-overlay">
         <div class="modal-content">
-            <span class="modal-close-btn" id="bitcoinModalClose">&times;</span>
+            <span class="modal-close-btn" id="bitcoinModalClose">×</span>
             <p class="modal-text" style="margin-bottom: 0.5rem;">Bitcoin Address:</p>
             <p>
                 <span id="bitcoinAddressToCopy" class="bitcoin-address-text" title="Click to Copy">3LWpYoUybEuJWZUq1u1Ln8AqpArKJ89m1P</span>
@@ -811,26 +819,19 @@
         }
 
         // Random text distortion for logo
-        const logo = document.querySelector('.logo');
-        if (logo) {
+        const logoDiv = document.querySelector('.logo'); // Target the div inside the link
+        if (logoDiv) {
             setInterval(() => {
                 if (Math.random() > 0.95) {
-                    logo.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+                    logoDiv.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
                     setTimeout(() => {
-                        logo.style.transform = 'translate(0, 0)';
+                        logoDiv.style.transform = 'translate(0, 0)';
                     }, 100);
                 }
             }, 3000);
         }
 
-        // Smooth scroll for HOME navigation
-        const homeNavButton = document.getElementById('homeNavButton');
-        if (homeNavButton) {
-            homeNavButton.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        }
-
+        // NOTE: JavaScript for HOME smooth scroll was removed as HOME is now a direct link.
 
         // Create elf particles (snow)
         const elfParticlesContainer = document.getElementById('elfParticles');
@@ -955,7 +956,10 @@
         }
 
         if (contactNavButton) {
-            contactNavButton.addEventListener('click', () => openModal(contactModal));
+            contactNavButton.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default if it becomes a link later
+                openModal(contactModal)
+            });
         }
         if (contactModalClose) {
             contactModalClose.addEventListener('click', () => closeModal(contactModal));
@@ -963,7 +967,7 @@
 
         if (bitcoinNavButton) {
             bitcoinNavButton.addEventListener('click', (e) => {
-                 e.stopPropagation(); // Prevent dropdown from closing immediately if any
+                 e.stopPropagation(); 
                  openModal(bitcoinModal)
             });
         }
@@ -971,11 +975,10 @@
             bitcoinModalClose.addEventListener('click', () => closeModal(bitcoinModal));
         }
 
-        // Close modal if overlay is clicked
         [contactModal, bitcoinModal].forEach(modal => {
             if (modal) {
                 modal.addEventListener('click', (event) => {
-                    if (event.target === modal) { // Clicked on overlay itself
+                    if (event.target === modal) {
                         closeModal(modal);
                     }
                 });
