@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supplements - Forrest and AI</title> <style>
+    <title>Supplements - Forrest and AI</title>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -108,6 +109,11 @@
             align-items: center;
         }
 
+        .logo-link {
+            text-decoration: none;
+            color: inherit;
+            display: inline-block;
+        }
         .logo {
             font-size: 1.8rem;
             font-weight: 400;
@@ -118,8 +124,7 @@
             text-transform: uppercase;
             position: relative;
         }
-
-        .logo:hover {
+        .logo-link:hover .logo {
             letter-spacing: 4px;
             text-shadow:
                 0 0 10px rgba(255, 255, 255, 0.5),
@@ -149,24 +154,18 @@
             text-transform: uppercase;
             font-size: 0.9rem;
         }
-        .nav-item a, .nav-item > a {
+        .nav-item a {
             color: var(--text-primary);
             text-decoration: none;
             display: block;
         }
-        .nav-item a:hover, .nav-item > a:hover {
-             color: var(--accent);
-             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-        }
-
-
-        .nav-item:hover { /* This applies to the div itself */
+        .nav-item:hover > a, .nav-item:hover {
             color: var(--accent);
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
             animation: glitch 0.3s ease-in-out;
         }
-        .nav-item:hover > a { /* Ensure hover on link within nav-item maintains animation if needed */
-            color: var(--accent); /* Explicitly set hover color for the link too */
+         .nav-item:hover a {
+            color: var(--accent);
         }
 
 
@@ -209,17 +208,16 @@
             overflow: hidden;
             font-size: 0.85rem;
             letter-spacing: 0.5px;
+            display: block;
             color: var(--text-primary);
             text-decoration: none;
-            display: block; /* Ensures the div takes full width for hover */
         }
-         .dropdown-item a { /* If dropdown items are ever wrapped in <a> tags directly */
-            color: inherit;
-            text-decoration: none;
-            display: block;
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            padding-left: 2.5rem;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+            color: var(--accent);
         }
-
-
         .dropdown-item::before {
             content: '>';
             position: absolute;
@@ -227,19 +225,11 @@
             opacity: 0;
             transition: all 0.3s ease;
         }
-
-        .dropdown-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            padding-left: 2.5rem;
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
-            color: var(--accent); /* Ensure hover text color change */
-        }
-
         .dropdown-item:hover::before {
             opacity: 1;
         }
 
-        /* Page Specific Content Styling (shared across sub-pages) */
+        /* Page Specific Content Styling */
         .page-main-content {
             flex-grow: 1;
             display: flex;
@@ -299,6 +289,78 @@
             52% { opacity: 1; }
         }
 
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: var(--secondary-bg);
+            padding: 2.5rem;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 30px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            position: relative;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            max-width: 90%;
+            width: 500px;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2rem;
+            color: var(--accent-dim);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .modal-close-btn:hover {
+            color: var(--accent);
+        }
+        .modal-text {
+            word-break: break-all;
+            margin-bottom: 1rem;
+        }
+        .bitcoin-address-text {
+            cursor: pointer;
+            color: var(--accent);
+            border-bottom: 1px dashed var(--accent-dim);
+            transition: color 0.2s ease, border-bottom-color 0.2s ease;
+            display: inline-block;
+            padding: 0.2rem 0;
+        }
+        .bitcoin-address-text:hover {
+            color: #00ccff;
+            border-bottom-color: #00ccff;
+        }
+        .copy-confirmation {
+            display: block;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--accent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .copy-confirmation.visible {
+            opacity: 1;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -313,7 +375,6 @@
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
             }
-
             .nav-links.active {
                 transform: translateX(0);
             }
@@ -328,6 +389,7 @@
             .page-main-content {
                  padding-top: 100px;
             }
+            .modal-content { font-size: 1rem; padding: 2rem; }
         }
 
     </style>
@@ -335,42 +397,56 @@
 <body>
     <nav>
         <div class="nav-container">
-            <div class="logo">Forrest and AI</div>
+            <a href="index.html" class="logo-link">
+                <div class="logo">Forrest and AI</div>
+            </a>
             <div class="nav-links">
-                <div class="nav-item"><a href="index.html" style="color: inherit; text-decoration: none;">HOME</a></div>
+                <div class="nav-item"><a href="index.html">HOME</a></div>
                 <div class="nav-item">
                     VIDEO
                     <div class="dropdown">
-                        <div class="dropdown-item">Episodes</div>
-                        <div class="dropdown-item">Early Slop</div>
-                        <div class="dropdown-item">Traditional Work</div>
-                        <div class="dropdown-item">Supplements</div>
+                        <a href="episodes.html" class="dropdown-item">Episodes</a>
+                        <a href="early_slop.html" class="dropdown-item">Early Slop</a>
+                        <a href="traditional_work.html" class="dropdown-item">Traditional Work</a>
+                        <a href="supplements.html" class="dropdown-item">Supplements</a>
                     </div>
                 </div>
                 <div class="nav-item">
                     SUPPORT
                     <div class="dropdown">
-                        <div class="dropdown-item">Patreon</div>
-                        <div class="dropdown-item">Bitcoin Address</div>
+                        <a href="https://patreon.com/frandai?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" rel="noopener noreferrer" class="dropdown-item">Patreon</a>
+                        <div class="dropdown-item" id="bitcoinNavButton">Bitcoin Address</div>
                     </div>
                 </div>
-                <div class="nav-item">ABOUT</div>
-                <div class="nav-item">CONTACT</div>
-                <div class="nav-item">
-                    LINKS
-                    <div class="dropdown">
-                        <div class="dropdown-item">YouTube</div>
-                        <div class="dropdown-item">Social Media</div>
-                    </div>
-                </div>
+                <div class="nav-item"><a href="about.html">ABOUT</a></div>
+                <div class="nav-item" id="contactNavButton">CONTACT</div>
             </div>
         </div>
     </nav>
 
     <div class="page-main-content">
-        <h1 class="page-heading">SUPPLEMENTS</h1> <a href="#stream-placeholder" class="glowing-link">STREAM</a>
+        <h1 class="page-heading">SUPPLEMENTS</h1>
+        <a href="#stream-placeholder" class="glowing-link">STREAM</a>
         <a href="#" class="glowing-link" id="downloadLink">DOWNLOAD</a>
         </div>
+
+    <div id="contactModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close-btn" id="contactModalClose">×</span>
+            <p class="modal-text">jozephk@protonmail.com</p>
+        </div>
+    </div>
+
+    <div id="bitcoinModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close-btn" id="bitcoinModalClose">×</span>
+            <p class="modal-text" style="margin-bottom: 0.5rem;">Bitcoin Address:</p>
+            <p>
+                <span id="bitcoinAddressToCopy" class="bitcoin-address-text" title="Click to Copy">3LWpYoUybEuJWZUq1u1Ln8AqpArKJ89m1P</span>
+            </p>
+            <span id="copyConfirmation" class="copy-confirmation">Copied!</span>
+        </div>
+    </div>
 
     <script>
         // Disturbing cursor trail effect
@@ -405,35 +481,95 @@
         }
 
         // Random text distortion for logo
-        const logo = document.querySelector('.logo');
-        if (logo) {
+        const logoDiv = document.querySelector('.logo');
+        if (logoDiv) {
             setInterval(() => {
                 if (Math.random() > 0.95) {
-                    logo.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+                    logoDiv.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
                     setTimeout(() => {
-                        logo.style.transform = 'translate(0, 0)';
+                        logoDiv.style.transform = 'translate(0, 0)';
                     }, 100);
                 }
             }, 3000);
         }
-
-        // Password prompt for DOWNLOAD link
+        
+        // Password prompt for DOWNLOAD link on this specific page
         const downloadLink = document.getElementById('downloadLink');
         if (downloadLink) {
             downloadLink.addEventListener('click', function(event) {
                 event.preventDefault();
-
                 const password = window.prompt("ENTER ACCESS CODE:");
-
                 if (password !== null) {
                     if (password === "your_secret_password") { // IMPORTANT: Change this password
                         alert("ACCESS GRANTED. Starting download... (Placeholder)");
                         // Add actual download logic here
-                        // Example: window.location.href = 'path/to/your/downloadable/file.zip';
                     } else {
                         alert("ACCESS DENIED: INCORRECT CODE.");
                     }
                 }
+            });
+        }
+
+        // Modal Functionality
+        const contactModal = document.getElementById('contactModal');
+        const bitcoinModal = document.getElementById('bitcoinModal');
+        const contactNavButton = document.getElementById('contactNavButton');
+        const bitcoinNavButton = document.getElementById('bitcoinNavButton');
+        const contactModalClose = document.getElementById('contactModalClose');
+        const bitcoinModalClose = document.getElementById('bitcoinModalClose');
+        const bitcoinAddressToCopy = document.getElementById('bitcoinAddressToCopy');
+        const copyConfirmation = document.getElementById('copyConfirmation');
+
+        function openModal(modal) {
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeModal(modal) {
+            if (modal) modal.classList.remove('active');
+        }
+
+        if (contactNavButton) {
+            contactNavButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal(contactModal);
+            });
+        }
+        if (contactModalClose) {
+            contactModalClose.addEventListener('click', () => closeModal(contactModal));
+        }
+
+        if (bitcoinNavButton) {
+            bitcoinNavButton.addEventListener('click', (e) => {
+                 e.stopPropagation();
+                 openModal(bitcoinModal);
+            });
+        }
+        if (bitcoinModalClose) {
+            bitcoinModalClose.addEventListener('click', () => closeModal(bitcoinModal));
+        }
+
+        [contactModal, bitcoinModal].forEach(modal => {
+            if (modal) {
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        closeModal(modal);
+                    }
+                });
+            }
+        });
+
+        if (bitcoinAddressToCopy) {
+            bitcoinAddressToCopy.addEventListener('click', () => {
+                const address = bitcoinAddressToCopy.innerText;
+                navigator.clipboard.writeText(address).then(() => {
+                    if(copyConfirmation) copyConfirmation.classList.add('visible');
+                    setTimeout(() => {
+                        if(copyConfirmation) copyConfirmation.classList.remove('visible');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy Bitcoin address: ', err);
+                    alert('Failed to copy address. Please copy it manually.');
+                });
             });
         }
     </script>
