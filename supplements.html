@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Episodes - Forrest and AI</title>
-    <style>
+    <title>Supplements - Forrest and AI</title> <style>
         * {
             margin: 0;
             padding: 0;
@@ -20,7 +19,7 @@
             --text-secondary: #999999;
             --border-color: #222222;
             --noise-opacity: 0.03;
-            --main-red-color: #ff0000; /* Added a red variable */
+            --main-red-color: #ff0000;
         }
 
         body {
@@ -240,8 +239,8 @@
             opacity: 1;
         }
 
-        /* Episodes Page Specific Content Styling */
-        .episodes-page-main-content {
+        /* Page Specific Content Styling (shared across sub-pages) */
+        .page-main-content {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -254,15 +253,14 @@
             z-index: 10;
         }
 
-        .episodes-heading {
+        .page-heading {
             font-family: 'Courier New', monospace;
-            font-size: 4.2rem; /* MODIFIED: Larger font size */
+            font-size: 4.2rem;
             font-weight: 400;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--main-red-color); /* MODIFIED: Red color */
+            color: var(--main-red-color);
             margin-bottom: 2.5rem;
-            /* Removed animation for a static heading */
         }
 
         .glowing-link {
@@ -319,15 +317,15 @@
             .nav-links.active {
                 transform: translateX(0);
             }
-            .episodes-heading {
-                font-size: 2.8rem; /* Adjust for smaller screens */
+            .page-heading {
+                font-size: 2.8rem;
                 margin-bottom: 1.5rem;
             }
             .glowing-link {
-                font-size: 2.2rem; /* Adjust for smaller screens */
+                font-size: 2.2rem;
                 margin: 1rem 0;
             }
-            .episodes-page-main-content {
+            .page-main-content {
                  padding-top: 100px;
             }
         }
@@ -369,12 +367,10 @@
         </div>
     </nav>
 
-    <div class="episodes-page-main-content">
-        <h1 class="episodes-heading">EPISODES</h1>
-        <a href="#stream-placeholder" class="glowing-link">STREAM</a>
+    <div class="page-main-content">
+        <h1 class="page-heading">SUPPLEMENTS</h1> <a href="#stream-placeholder" class="glowing-link">STREAM</a>
         <a href="#" class="glowing-link" id="downloadLink">DOWNLOAD</a>
-        <a href="#physical-media-placeholder" class="glowing-link">PHYSICAL MEDIA</a>
-    </div>
+        </div>
 
     <script>
         // Disturbing cursor trail effect
@@ -432,13 +428,12 @@
                 if (password !== null) {
                     if (password === "your_secret_password") { // IMPORTANT: Change this password
                         alert("ACCESS GRANTED. Starting download... (Placeholder)");
-                        // Add actual download logic here:
+                        // Add actual download logic here
                         // Example: window.location.href = 'path/to/your/downloadable/file.zip';
                     } else {
                         alert("ACCESS DENIED: INCORRECT CODE.");
                     }
                 }
-                // If password is null, user clicked Cancel; do nothing.
             });
         }
     </script>
